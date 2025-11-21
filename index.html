@@ -1,11 +1,127 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Movie Libry</title>
+    <title>Movie Library</title>
+    <script src="https://cdn.tailwindcss.com"></script>
   </head>
-  <body>
+  <body class="min-h-screen bg-gray-100">
+    <div class="max-w-5xl mx-auto py-12 px-4">
+      <!-- Header -->
+      <div class="mb-8">
+        <h1 class="text-3xl font-semibold text-gray-900 text-center">
+          Movie Library
+        </h1>
+      </div>
+
+      <!-- Stats Cards -->
+      <div class="grid grid-cols-3 gap-4 mb-6">
+        <div class="bg-white border border-gray-200 p-6 text-center rounded">
+          <div class="text-sm text-gray-500 mb-1">Total Movies</div>
+          <div class="text-3xl font-semibold text-gray-900" id="totalCount">
+            0
+          </div>
+        </div>
+        <div
+          class="bg-green-100 border border-gray-200 p-6 text-center rounded"
+        >
+          <div class="text-sm text-green-900 mb-1">Watched</div>
+          <div class="text-3xl font-semibold text-green-600" id="watchedCount">
+            0
+          </div>
+        </div>
+        <div class="bg-red-100 border border-gray-200 p-6 text-center rounded">
+          <div class="text-sm text-erd-900 mb-1">Unwatched</div>
+          <div
+            class="text-3xl font-semibold text-orange-500"
+            id="unwatchedCount"
+          >
+            0
+          </div>
+        </div>
+      </div>
+
+      <!-- Filters & Actions Window -->
+      <div class="bg-white border border-gray-200 p-4 mb-6 shadow-lg rounded">
+        <div class="flex items-center justify-between">
+          <div class="flex gap-4 text-sm">
+            <button
+              onclick="filterMovies('all')"
+              id="btnAll"
+              class="text-gray-900 border-b-2 border-gray-900 pb-1"
+            >
+              All
+            </button>
+            <button
+              onclick="filterMovies('watched')"
+              id="btnWatched"
+              class="text-gray-400 hover:text-gray-600 pb-1"
+            >
+              Watched
+            </button>
+            <button
+              onclick="filterMovies('unwatched')"
+              id="btnUnwatched"
+              class="text-gray-400 hover:text-gray-600 pb-1"
+            >
+              Unwatched
+            </button>
+          </div>
+
+          <button
+            onclick="toggleAddForm()"
+            id="btnToggleForm"
+            class="text-sm px-4 py-1 border border-gray-900 text-gray-900 rounded hover:bg-gray-900 hover:text-white"
+          >
+            + Add Movie
+          </button>
+        </div>
+      </div>
+
+      <!-- Add Movie Form -->
+      <div
+        id="addForm"
+        class="bg-white border border-gray-200 p-6 mb-6 rounded hidden"
+      >
+        <h3 class="text-sm font-medium text-gray-900 mb-4">Add New Movie</h3>
+        <div class="grid grid-cols-3 gap-3 mb-3">
+          <input
+            type="text"
+            id="inputTitle"
+            placeholder="Title"
+            class="px-3 py-2 border border-gray-200 text-sm rounded focus:outline-none focus:border-gray-400"
+          />
+          <input
+            type="text"
+            id="inputYear"
+            placeholder="Year"
+            class="px-3 py-2 border border-gray-200 text-sm rounded focus:outline-none focus:border-gray-400"
+          />
+          <input
+            type="text"
+            id="inputDirector"
+            placeholder="Director"
+            class="px-3 py-2 border border-gray-200 text-sm rounded focus:outline-none focus:border-gray-400"
+          />
+        </div>
+        <button
+          onclick="addMovie()"
+          class="px-4 py-2 bg-gray-900 text-white text-sm rounded hover:bg-gray-700"
+        >
+          Add to Library
+        </button>
+      </div>
+
+      <!-- Movies List Window -->
+      <div class="bg-slate-50 border border-gray-200 p-6 shadow-xl rounded">
+        <h3 class="text-sm font-medium text-gray-900 mb-4">Movies</h3>
+        <div id="moviesList" class="space-y-3">
+          <!-- Movies will be rendered here -->
+        </div>
+      </div>
+    </div>
+
     <script src="/script/main.js"></script>
   </body>
 </html>

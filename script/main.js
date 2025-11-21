@@ -3,180 +3,212 @@ const movies = [
     title: "Inception",
     year: "2010",
     director: "Christopher Nolan",
-    isRead: false,
+    isWatched: false,
   },
   {
     title: "The Godfather",
     year: "1972",
     director: "Francis Ford Coppola",
-    isRead: false,
+    isWatched: false,
   },
-  { title: "Parasite", year: "2019", director: "Bong Joon-ho", isRead: false },
+  {
+    title: "Parasite",
+    year: "2019",
+    director: "Bong Joon-ho",
+    isWatched: false,
+  },
   {
     title: "Pulp Fiction",
     year: "1994",
     director: "Quentin Tarantino",
-    isRead: false,
+    isWatched: false,
   },
   {
     title: "Spirited Away",
     year: "2001",
     director: "Hayao Miyazaki",
-    isRead: false,
+    isWatched: false,
   },
   {
     title: "The Matrix",
     year: "1999",
     director: "Lana and Lilly Wachowski",
-    isRead: false,
+    isWatched: false,
   },
   {
     title: "12 Angry Men",
     year: "1957",
     director: "Sidney Lumet",
-    isRead: false,
+    isWatched: false,
   },
   {
     title: "Mad Max: Fury Road",
     year: "2015",
     director: "George Miller",
-    isRead: false,
+    isWatched: false,
   },
-  { title: "Get Out", year: "2017", director: "Jordan Peele", isRead: false },
+  {
+    title: "Get Out",
+    year: "2017",
+    director: "Jordan Peele",
+    isWatched: false,
+  },
   {
     title: "Arrival",
     year: "2016",
     director: "Denis Villeneuve",
-    isRead: false,
+    isWatched: false,
   },
 ];
 
-let updatedMovies = movies;
+let currentFilter = "all";
 
-// function addMovie() {
-//   const input = prompt('Enter movie info (title, year, director):');
-//   const [title, year, director] = input.split(',');
-//   const movie = { title: title.trim(), year: year.trim(), director: director.trim() };
-//   movie.isRead = false;
+function toggleAddForm() {
+  const form = document.getElementById("addForm");
+  const btn = document.getElementById("btnToggleForm");
 
-//   movies.push(movie);
-// }
+  if (form.classList.contains("hidden")) {
+    form.classList.remove("hidden");
+    btn.textContent = "Cancel";
+  } else {
+    form.classList.add("hidden");
+    btn.textContent = "+ Add Movie";
+    clearForm();
+  }
+}
 
-// function listMovies() {
-//   for (let i = 0; i < updatedMovies.length; i++) {
-//     console.log(updatedMovies[i].title);
-//   }
-// }
+function clearForm() {
+  document.getElementById("inputTitle").value = "";
+  document.getElementById("inputYear").value = "";
+  document.getElementById("inputDirector").value = "";
+}
 
-// function markAsWatched(title) {
-//   for (let i = 0; i < updatedMovies.length; i++) {
-//     if (updatedMovies[i].title === title) {
-//       updatedMovies[i].isRead = true;
-//     }
-//   }
+function addMovie() {
+  const title = document.getElementById("inputTitle").value.trim();
+  const year = document.getElementById("inputYear").value.trim();
+  const director = document.getElementById("inputDirector").value.trim();
 
-// ---------------------------------------------------------------------------------------
+  if (title && year && director) {
+    movies.push({
+      title,
+      year,
+      director,
+      isWatched: false,
+    });
 
-const addMovie = () => {
-  const input = prompt("Enter movie info (title, year, director):");
-  const [title, year, director] = input.split(",");
-  const movie = updatedMovies.push({
-    title: title.trim(),
-    year: year.trim(),
-    director: director.trim(),
-    isRead: false,
-  });
-};
+    clearForm();
+    toggleAddForm();
+    renderMovies();
+    updateStats();
+  }
+}
 
-const removeMovie = () => {
-  const input = prompt("Enter title of movie to be deleted");
-  const delEntry = updatedMovies.filter((movie) => movie.title !== input);
+function removeMovie(title) {
+  const index = movies.findIndex((movie) => movie.title === title);
+  if (index > -1) {
+    movies.splice(index, 1);
+    renderMovies();
+    updateStats();
+  }
+}
 
-  return delEntry;
-};
+function toggleWatched(title) {
+  const movie = movies.find((movie) => movie.title === title);
+  if (movie) {
+    movie.isWatched = !movie.isWatched;
+    renderMovies();
+    updateStats();
+  }
+}
 
-const listMovies = (choice) => {
-  // UpdatedMovies exists and has data
-  if (!updatedMovies || updatedMovies.length === 0) {
-    console.log("No movies in the list!");
+function filterMovies(filter) {
+  currentFilter = filter;
+
+  const btnAll = document.getElementById("btnAll");
+  const btnWatched = document.getElementById("btnWatched");
+  const btnUnwatched = document.getElementById("btnUnwatched");
+
+  btnAll.className = "text-gray-400 hover:text-gray-600 pb-1";
+  btnWatched.className = "text-gray-400 hover:text-gray-600 pb-1";
+  btnUnwatched.className = "text-gray-400 hover:text-gray-600 pb-1";
+
+  if (filter === "all") {
+    btnAll.className = "text-gray-900 border-b-2 border-gray-900 pb-1";
+  } else if (filter === "watched") {
+    btnWatched.className = "text-gray-900 border-b-2 border-gray-900 pb-1";
+  } else if (filter === "unwatched") {
+    btnUnwatched.className = "text-gray-900 border-b-2 border-gray-900 pb-1";
+  }
+
+  renderMovies();
+}
+
+function renderMovies() {
+  const moviesList = document.getElementById("moviesList");
+
+  let filteredMovies = movies;
+  if (currentFilter === "watched") {
+    filteredMovies = movies.filter((movie) => movie.isWatched);
+  } else if (currentFilter === "unwatched") {
+    filteredMovies = movies.filter((movie) => !movie.isWatched);
+  }
+
+  if (filteredMovies.length === 0) {
+    moviesList.innerHTML = `
+      <div class="text-center py-12 text-gray-400">
+        <p class="text-sm">No movies to display</p>
+      </div>
+    `;
     return;
   }
 
-  if (isNaN(choice)) {
-    // Show all movies
-    console.log("\n📺 All Movies:");
-    updatedMovies.forEach((movie) => {
-      console.log(`- ${movie.title}`);
-    });
-  } else if (choice === 1) {
-    // Show watched movies
-    const watchedMovies = updatedMovies.filter((movie) => movie.isRead);
-    console.log("\n✅ Watched Movies:");
-    if (watchedMovies.length === 0) {
-      console.log("No watched movies yet!");
-    } else {
-      watchedMovies.forEach((movie) => {
-        console.log(`- ${movie.title}`);
-      });
-    }
-  } else if (choice === 2) {
-    // Show not watched movies
-    const notWatchedMovies = updatedMovies.filter((movie) => !movie.isRead);
-    console.log("\n⏳ Not Watched Movies:");
-    if (notWatchedMovies.length === 0) {
-      console.log("You've watched everything!");
-    } else {
-      notWatchedMovies.forEach((movie) => {
-        console.log(`- ${movie.title}`);
-      });
-    }
-  } else {
-    console.log("Invalid choice. Please enter 1 or 2, or leave blank.");
-  }
-};
+  moviesList.innerHTML = filteredMovies
+    .map(
+      (movie) => `
+    <div class="border-b border-gray-100 pb-3 last:border-0">
+      <div class="flex items-start justify-between gap-4">
+        <div class="flex-1">
+          <div class="flex items-center gap-2 mb-1">
+            <h3 class="text-base font-medium text-gray-900">${movie.title}</h3>
+            ${
+              movie.isWatched
+                ? '<span class="text-xs text-green-600">✓ Watched</span>'
+                : ""
+            }
+          </div>
+          <p class="text-sm text-gray-500">${movie.year} · ${movie.director}</p>
+        </div>
 
-const markAsWatched = (name) => {
-  const movieTitle = updatedMovies.find((movie) => movie.title === name);
-  movieTitle.isRead = true;
-};
-
-let running = true;
-while (running) {
-  const choice = prompt(`
-📚 Movie Tracker
-  1. Add Movie
-  2. Remove Movie
-  3. List Movie
-  4. Mark Movie as Watched
-  5. Exit
-  Enter your choice:`);
-
-  switch (choice) {
-    case "1":
-      addMovie();
-      break;
-    case "2":
-      removeMovie();
-      break;
-    case "3":
-      let choice = parseInt(
-        prompt(
-          "Select: \n 1. Watched\n 2. Not Watched\n Leave blank for list of all movies",
-        ),
-      );
-      listMovies(choice);
-      break;
-    case "4":
-      const title = prompt(
-        "Enter the title of the movie to be mark as watched:",
-      );
-      markAsWatched(title);
-      break;
-    case "5":
-      running = false;
-      alert("Goodbye!");
-      break;
-    default:
-      alert("Invalid choice.");
-  }
+        <div class="flex gap-3 text-sm">
+          <button
+            onclick="toggleWatched('${movie.title.replace(/'/g, "\\'")}')"
+            class="text-gray-600 hover:text-gray-900"
+          >
+            ${movie.isWatched ? "Unwatch" : "Watch"}
+          </button>
+          <button
+            onclick="removeMovie('${movie.title.replace(/'/g, "\\'")}')"
+            class="text-gray-400 hover:text-red-600"
+          >
+            Delete
+          </button>
+        </div>
+      </div>
+    </div>
+  `
+    )
+    .join("");
 }
+
+function updateStats() {
+  const watchedCount = movies.filter((movie) => movie.isWatched).length;
+  const totalCount = movies.length;
+  const unwatchedCount = totalCount - watchedCount;
+
+  document.getElementById("watchedCount").textContent = watchedCount;
+  document.getElementById("totalCount").textContent = totalCount;
+  document.getElementById("unwatchedCount").textContent = unwatchedCount;
+}
+
+renderMovies();
+updateStats();
