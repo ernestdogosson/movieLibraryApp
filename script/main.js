@@ -179,16 +179,16 @@ function renderMovies() {
           <p class="text-sm text-gray-500">${movie.year} · ${movie.director}</p>
         </div>
 
-        <div class="flex gap-3 text-sm">
+        <div class="flex flex-col sm:flex-row gap-2 sm:gap-3 text-sm">
           <button
             onclick="toggleWatched('${movie.title.replace(/'/g, "\\'")}')"
-            class="text-gray-600 hover:text-gray-900"
+            class="text-gray-600 hover:text-gray-900 py-1 px-2 sm:px-0"
           >
             ${movie.isWatched ? "Unwatch" : "Watch"}
           </button>
           <button
             onclick="removeMovie('${movie.title.replace(/'/g, "\\'")}')"
-            class="text-gray-400 hover:text-red-600"
+            class="text-gray-400 hover:text-red-600 py-1 px-2 sm:px-0"
           >
             Delete
           </button>

@@ -7,16 +7,16 @@
     <script src="https://cdn.tailwindcss.com"></script>
   </head>
   <body class="min-h-screen bg-gray-100">
-    <div class="max-w-5xl mx-auto py-12 px-4">
+    <div class="max-w-5xl mx-auto py-8 md:py-12 px-4">
       <!-- Header -->
       <div class="mb-8">
-        <h1 class="text-3xl font-semibold text-gray-900 text-center">
+        <h1 class="text-2xl md:text-3xl font-semibold text-gray-900 text-center">
           Movie Library
         </h1>
       </div>
 
       <!-- Stats Cards -->
-      <div class="grid grid-cols-3 gap-4 mb-6">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-4 mb-6">
         <div class="bg-white border border-gray-200 p-6 text-center rounded">
           <div class="text-sm text-gray-500 mb-1">Total Movies</div>
           <div class="text-3xl font-semibold text-gray-900" id="totalCount">
@@ -44,8 +44,8 @@
 
       <!-- Filters & Actions Window -->
       <div class="bg-white border border-gray-200 p-4 mb-6 shadow-lg rounded">
-        <div class="flex items-center justify-between">
-          <div class="flex gap-4 text-sm">
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div class="flex gap-2 sm:gap-4 text-sm">
             <button
               onclick="filterMovies('all')"
               id="btnAll"
@@ -72,7 +72,7 @@
           <button
             onclick="toggleAddForm()"
             id="btnToggleForm"
-            class="text-sm px-4 py-1 border border-gray-900 text-gray-900 rounded hover:bg-gray-900 hover:text-white"
+            class="text-sm px-4 py-2 border border-gray-900 text-gray-900 rounded hover:bg-gray-900 hover:text-white w-full sm:w-auto"
           >
             + Add Movie
           </button>
@@ -85,7 +85,7 @@
         class="bg-white border border-gray-200 p-6 mb-6 rounded hidden"
       >
         <h3 class="text-sm font-medium text-gray-900 mb-4">Add New Movie</h3>
-        <div class="grid grid-cols-3 gap-3 mb-3">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-3 mb-3">
           <input
             type="text"
             id="inputTitle"
@@ -107,7 +107,7 @@
         </div>
         <button
           onclick="addMovie()"
-          class="px-4 py-2 bg-gray-900 text-white text-sm rounded hover:bg-gray-700"
+          class="px-4 py-3 bg-gray-900 text-white text-sm rounded hover:bg-gray-700 w-full sm:w-auto"
         >
           Add to Library
         </button>
