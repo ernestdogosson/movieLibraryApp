@@ -128,16 +128,22 @@ function filterMovies(filter) {
   const btnWatched = document.getElementById("btnWatched");
   const btnUnwatched = document.getElementById("btnUnwatched");
 
-  btnAll.className = "text-gray-400 hover:text-gray-600 pb-1";
-  btnWatched.className = "text-gray-400 hover:text-gray-600 pb-1";
-  btnUnwatched.className = "text-gray-400 hover:text-gray-600 pb-1";
+  // Reset all to inactive style (Gray text)
+  const inactiveClass = "text-gray-400 hover:text-white pb-1 transition-colors";
+  btnAll.className = inactiveClass;
+  btnWatched.className = inactiveClass;
+  btnUnwatched.className = inactiveClass;
+
+  // Set active style (White text + Indigo Border)
+  const activeClass =
+    "text-white border-b-2 border-indigo-500 pb-1 font-medium transition-colors";
 
   if (filter === "all") {
-    btnAll.className = "text-gray-900 border-b-2 border-gray-900 pb-1";
+    btnAll.className = activeClass;
   } else if (filter === "watched") {
-    btnWatched.className = "text-gray-900 border-b-2 border-gray-900 pb-1";
+    btnWatched.className = activeClass;
   } else if (filter === "unwatched") {
-    btnUnwatched.className = "text-gray-900 border-b-2 border-gray-900 pb-1";
+    btnUnwatched.className = activeClass;
   }
 
   renderMovies();
@@ -155,8 +161,8 @@ function renderMovies() {
 
   if (filteredMovies.length === 0) {
     moviesList.innerHTML = `
-      <div class="text-center py-12 text-gray-400">
-        <p class="text-sm">No movies to display</p>
+      <div class="text-center py-12 text-gray-500">
+        <p class="text-sm">No movies found in this category.</p>
       </div>
     `;
     return;
@@ -165,37 +171,45 @@ function renderMovies() {
   moviesList.innerHTML = filteredMovies
     .map(
       (movie) => `
-    <div class="border-b border-gray-100 pb-3 last:border-0">
+    <div class="bg-gray-700/50 p-4 rounded-lg border border-gray-600 mb-3 hover:bg-gray-700 transition-colors shadow-sm">
       <div class="flex items-start justify-between gap-4">
         <div class="flex-1">
-          <div class="flex items-center gap-2 mb-1">
-            <h3 class="text-base font-medium text-gray-900">${movie.title}</h3>
+          <div class="flex items-center gap-3 mb-1">
+            <h3 class="text-lg font-bold text-white">${movie.title}</h3>
             ${
               movie.isWatched
-                ? '<span class="text-xs text-green-600">✓ Watched</span>'
+                ? '<span class="text-xs bg-emerald-900/50 text-emerald-400 px-2 py-0.5 rounded border border-emerald-800">✓ Watched</span>'
                 : ""
             }
           </div>
-          <p class="text-sm text-gray-500">${movie.year} · ${movie.director}</p>
+          <p class="text-sm text-gray-400 font-medium">${movie.year} • ${movie.director}</p>
         </div>
 
-        <div class="flex flex-col sm:flex-row gap-2 sm:gap-3 text-sm">
+        <div class="flex items-center gap-3">
           <button
             onclick="toggleWatched('${movie.title.replace(/'/g, "\\'")}')"
-            class="text-gray-600 hover:text-gray-900 py-1 px-2 sm:px-0"
+            class="text-sm font-medium transition-colors ${
+              movie.isWatched
+                ? "text-gray-400 hover:text-white"
+                : "text-indigo-400 hover:text-indigo-300"
+            }"
           >
-            ${movie.isWatched ? "Unwatch" : "Watch"}
+            ${movie.isWatched ? "Unwatch" : "Mark Watched"}
           </button>
+
           <button
             onclick="removeMovie('${movie.title.replace(/'/g, "\\'")}')"
-            class="text-gray-400 hover:text-red-600 py-1 px-2 sm:px-0"
+            class="text-rose-400 hover:text-rose-300 transition-colors p-1"
+            title="Delete Movie"
           >
-            Delete
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+            </svg>
           </button>
         </div>
       </div>
     </div>
-  `
+  `,
     )
     .join("");
 }
@@ -210,5 +224,6 @@ function updateStats() {
   document.getElementById("unwatchedCount").textContent = unwatchedCount;
 }
 
+// Initial render
 renderMovies();
 updateStats();

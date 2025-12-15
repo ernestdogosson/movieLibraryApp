@@ -3,129 +3,158 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Movie Library</title>
+    <meta
+      name="description"
+      content="A personal movie library app built with Vanilla JS and Tailwind CSS. Features a modern dark UI to track, filter, and manage your watched and unwatched movies."
+    />
+    <title>MyMovieLib | Track Your Watchlist</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎬</text></svg>"
+    />
     <link href="./css/output.css" rel="stylesheet" />
   </head>
-  <body class="min-h-screen bg-gray-100">
+  <body class="min-h-screen bg-gray-900 font-sans text-gray-100">
     <div class="max-w-5xl mx-auto py-8 md:py-12 px-4">
-      <!-- Header -->
-      <div class="mb-8">
-        <h1
-          class="text-2xl md:text-3xl font-semibold text-gray-900 text-center"
-        >
+      <header class="mb-8 text-center">
+        <h1 class="text-3xl md:text-4xl font-bold text-white tracking-tight">
           Movie Library
         </h1>
-      </div>
+        <p class="text-gray-400 mt-2 text-sm">
+          Manage your personal collection
+        </p>
+      </header>
 
-      <!-- Stats Cards -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-4 mb-6">
-        <div class="bg-white border border-gray-200 p-6 text-center rounded">
-          <div class="text-sm text-gray-500 mb-1">Total Movies</div>
-          <div class="text-3xl font-semibold text-gray-900" id="totalCount">
-            0
-          </div>
-        </div>
-        <div
-          class="bg-green-100 border border-gray-200 p-6 text-center rounded"
+      <main>
+        <section
+          aria-label="Library Statistics"
+          class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8"
         >
-          <div class="text-sm text-green-900 mb-1">Watched</div>
-          <div class="text-3xl font-semibold text-green-600" id="watchedCount">
-            0
-          </div>
-        </div>
-        <div class="bg-red-100 border border-gray-200 p-6 text-center rounded">
-          <div class="text-sm text-erd-900 mb-1">Unwatched</div>
           <div
-            class="text-3xl font-semibold text-orange-600"
-            id="unwatchedCount"
+            class="bg-gray-800 border border-gray-700 p-6 text-center rounded-lg shadow-lg"
           >
-            0
+            <div class="text-sm font-medium text-gray-400 mb-1">
+              Total Movies
+            </div>
+            <div class="text-3xl font-bold text-white" id="totalCount">0</div>
           </div>
-        </div>
-      </div>
+          <div
+            class="bg-gray-800 border border-gray-700 p-6 text-center rounded-lg shadow-lg"
+          >
+            <div class="text-sm font-medium text-emerald-400 mb-1">Watched</div>
+            <div class="text-3xl font-bold text-emerald-500" id="watchedCount">
+              0
+            </div>
+          </div>
+          <div
+            class="bg-gray-800 border border-gray-700 p-6 text-center rounded-lg shadow-lg"
+          >
+            <div class="text-sm font-medium text-rose-400 mb-1">Unwatched</div>
+            <div class="text-3xl font-bold text-rose-500" id="unwatchedCount">
+              0
+            </div>
+          </div>
+        </section>
 
-      <!-- Filters & Actions Window -->
-      <div class="bg-white border border-gray-200 p-4 mb-6 shadow-lg rounded">
-        <div
-          class="flex flex-col sm:flex-row items-center justify-between gap-4"
+        <section
+          aria-label="Filter and Add Movies"
+          class="bg-gray-800 border border-gray-700 p-4 mb-6 shadow-lg rounded-lg"
         >
-          <div class="flex gap-2 sm:gap-4 text-sm">
-            <button
-              onclick="filterMovies('all')"
-              id="btnAll"
-              class="text-gray-900 border-b-2 border-gray-900 pb-1"
+          <div
+            class="flex flex-col sm:flex-row items-center justify-between gap-4"
+          >
+            <nav
+              aria-label="Filter Movies"
+              class="flex gap-4 text-sm font-medium"
             >
-              All
-            </button>
+              <button
+                onclick="filterMovies('all')"
+                id="btnAll"
+                aria-current="page"
+                class="text-white border-b-2 border-indigo-500 pb-1 px-1 transition-colors"
+              >
+                All
+              </button>
+              <button
+                onclick="filterMovies('watched')"
+                id="btnWatched"
+                class="text-gray-400 hover:text-white pb-1 px-1 transition-colors"
+              >
+                Watched
+              </button>
+              <button
+                onclick="filterMovies('unwatched')"
+                id="btnUnwatched"
+                class="text-gray-400 hover:text-white pb-1 px-1 transition-colors"
+              >
+                Unwatched
+              </button>
+            </nav>
+
             <button
-              onclick="filterMovies('watched')"
-              id="btnWatched"
-              class="text-gray-400 hover:text-gray-600 pb-1"
+              onclick="toggleAddForm()"
+              id="btnToggleForm"
+              class="text-sm px-5 py-2.5 bg-indigo-600 text-white font-medium rounded-lg hover:bg-indigo-500 transition-colors shadow-md w-full sm:w-auto"
             >
-              Watched
-            </button>
-            <button
-              onclick="filterMovies('unwatched')"
-              id="btnUnwatched"
-              class="text-gray-400 hover:text-gray-600 pb-1"
-            >
-              Unwatched
+              + Add Movie
             </button>
           </div>
+        </section>
 
+        <section
+          id="addForm"
+          aria-label="Add a new movie"
+          class="bg-gray-800 border border-gray-700 p-6 mb-6 rounded-lg shadow-lg hidden"
+        >
+          <h2 class="text-lg font-semibold text-white mb-4">Add New Movie</h2>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+            <input
+              type="text"
+              id="inputTitle"
+              placeholder="Title"
+              aria-label="Movie Title"
+              class="px-4 py-2.5 bg-gray-900 border border-gray-600 text-white text-sm rounded focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 placeholder-gray-500"
+            />
+
+            <input
+              type="text"
+              id="inputYear"
+              placeholder="Year"
+              aria-label="Release Year"
+              class="px-4 py-2.5 bg-gray-900 border border-gray-600 text-white text-sm rounded focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 placeholder-gray-500"
+            />
+
+            <input
+              type="text"
+              id="inputDirector"
+              placeholder="Director"
+              aria-label="Director Name"
+              class="px-4 py-2.5 bg-gray-900 border border-gray-600 text-white text-sm rounded focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 placeholder-gray-500"
+            />
+          </div>
           <button
-            onclick="toggleAddForm()"
-            id="btnToggleForm"
-            class="text-sm px-4 py-2 border border-gray-900 text-gray-900 rounded hover:bg-gray-900 hover:text-white w-full sm:w-auto"
+            onclick="addMovie()"
+            class="px-6 py-2.5 bg-emerald-600 text-white text-sm font-medium rounded-lg hover:bg-emerald-500 transition-colors w-full sm:w-auto shadow-md"
           >
-            + Add Movie
+            Save to Library
           </button>
-        </div>
-      </div>
+        </section>
 
-      <!-- Add Movie Form -->
-      <div
-        id="addForm"
-        class="bg-white border border-gray-200 p-6 mb-6 rounded hidden"
-      >
-        <h3 class="text-sm font-medium text-gray-900 mb-4">Add New Movie</h3>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-3 mb-3">
-          <input
-            type="text"
-            id="inputTitle"
-            placeholder="Title"
-            class="px-3 py-2 border border-gray-200 text-sm rounded focus:outline-none focus:border-gray-400"
-          />
-          <input
-            type="text"
-            id="inputYear"
-            placeholder="Year"
-            class="px-3 py-2 border border-gray-200 text-sm rounded focus:outline-none focus:border-gray-400"
-          />
-          <input
-            type="text"
-            id="inputDirector"
-            placeholder="Director"
-            class="px-3 py-2 border border-gray-200 text-sm rounded focus:outline-none focus:border-gray-400"
-          />
-        </div>
-        <button
-          onclick="addMovie()"
-          class="px-4 py-3 bg-gray-900 text-white text-sm rounded hover:bg-gray-700 w-full sm:w-auto"
+        <section
+          aria-labelledby="collection-heading"
+          class="bg-gray-800 border border-gray-700 p-6 shadow-xl rounded-lg min-h-[200px]"
         >
-          Add to Library
-        </button>
-      </div>
-
-      <!-- Movies List Window -->
-      <div class="bg-slate-50 border border-gray-200 p-6 shadow-xl rounded">
-        <h3 class="text-sm font-medium text-gray-900 mb-4">Movies</h3>
-        <div id="moviesList" class="space-y-3">
-          <!-- Movies will be rendered here -->
-        </div>
-      </div>
+          <h2
+            id="collection-heading"
+            class="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-4"
+          >
+            Your Collection
+          </h2>
+          <div id="moviesList" class="space-y-3"></div>
+        </section>
+      </main>
     </div>
-
     <script src="script/main.js"></script>
   </body>
 </html>
