@@ -1,0 +1,24 @@
+{
+  "name": "js-06",
+  "version": "1.0.0",
+  "description": "A simple movie tracking application built with vanilla JavaScript and Tailwind CSS.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "npx @tailwindcss/cli -i ./input.css -o ./output.css --watch",
+    "build": "npx @tailwindcss/cli -i ./input.css -o ./output.css --minify"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ernestdogosson/js-06.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ernestdogosson/js-06/issues"
+  },
+  "homepage": "https://github.com/ernestdogosson/js-06#readme",
+  "devDependencies": {
+    "tailwindcss": "^4.0.0"
+  }
+}
